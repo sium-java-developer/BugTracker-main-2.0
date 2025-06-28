@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layouts/main-layout :: main-layout(~{::title}, ~{::.content}, 'users')}">
+<head>
+    <title>User Management</title>
+</head>
+<body>
+<div class="content">
+    <div class="container-fluid mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="h3 mb-0">User Management</h1>
+            <a th:href="@{/users/new}" class="btn btn-primary">
+                <i class="bi bi-plus-circle-fill me-1"></i> Add New User
+            </a>
+        </div>
+
+        <!-- Success/Error Messages -->
+        <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+            <span th:text="${successMessage}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <span th:text="${errorMessage}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <div th:if="${usersPage.empty}" class="alert alert-info mb-0">
+                    No users found.
+                </div>
+                <div th:unless="${usersPage.empty}">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead class="table-light">
+                            <tr>
+                                <th>ID</th>
+                                <th>Username</th>
+                                <th>Full Name</th>
+                                <th>Email</th>
+                                <th class="text-center">Role</th>
+                                <th class="text-end">Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="user : ${usersPage.content}">
+                                <td th:text="${user.id}"></td>
+                                <td th:text="${user.username}"></td>
+                                <td th:text="${user.firstName + ' ' + user.lastName}"></td>
+                                <td><a th:href="'mailto:' + ${user.email}" th:text="${user.email}"></a></td>
+                                <td class="text-center">
+                                    <span th:if="${user.admin}" class="badge bg-danger">Admin</span>
+                                    <span th:unless="${user.admin}" class="badge bg-secondary">User</span>
+                                </td>
+                                <td class="text-end">
+                                    <a th:href="@{/users/{id}/edit(id=${user.id})}" class="btn btn-sm btn-warning text-dark me-1" title="Edit">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </a>
+                                    <!-- Using th:method="delete" for RESTful compliance -->
+                                    <form th:action="@{/users/{id}(id=${user.id})}" th:method="delete" class="d-inline"
+                                          onsubmit="return confirm('Are you sure you want to delete this user? This action cannot be undone.');">
+                                        <button type="submit" class="btn btn-sm btn-danger" title="Delete">
+                                            <i class="bi bi-trash-fill"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Pagination Controls -->
+                    <nav th:if="${usersPage.totalPages > 1}" aria-label="Page navigation" class="mt-4">
+                        <ul class="pagination justify-content-center">
+                            <li class="page-item" th:classappend="${usersPage.first} ? 'disabled'">
+                                <a class="page-link" th:href="@{/users(page=${usersPage.number - 1}, size=${usersPage.size})}">Previous</a>
+                            </li>
+                            <li class="page-item" th:each="i : ${#numbers.sequence(0, usersPage.totalPages - 1)}"
+                                th:classappend="${i == usersPage.number} ? 'active'">
+                                <a class="page-link" th:href="@{/users(page=${i}, size=${usersPage.size})}" th:text="${i + 1}"></a>
+                            </li>
+                            <li class="page-item" th:classappend="${usersPage.last} ? 'disabled'">
+                                <a class="page-link" th:href="@{/users(page=${usersPage.number + 1}, size=${usersPage.size})}">Next</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<!--
+  This file now acts as a content provider for the main layout.
+  The th:replace attribute on the <html> tag is the key change.
+-->
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security6"
+      th:replace="~{layouts/main-layout :: main-layout(~{::title}, ~{::.content}, 'home')}">
+
+<head>
+    <!-- This title will be passed to the main-layout's <title> tag -->
+    <title>Bug Tracker - Home</title>
+</head>
+
+<body>
+
+<!-- This entire div will replace the content placeholder in the main-layout -->
+<div class="content">
+    <!-- Main Content Area -->
+    <main class="container flex-grow-1 mt-5 mb-5">
+        <div class="p-5 mb-4 bg-light rounded-3 shadow-sm">
+            <div class="container-fluid py-5 text-center">
+                <h1 class="display-5 fw-bold">Welcome to Bug Tracker!</h1>
+                <p class="fs-4 col-md-10 mx-auto">
+                    Your central hub for reporting, tracking, and resolving software bugs efficiently.
+                    Let's make great software together!
+                </p>
+                <!-- Conditional Call to Action based on authentication -->
+                <div sec:authorize="isAuthenticated()" class="mt-4">
+                    <a class="btn btn-primary btn-lg" th:href="@{/bugs}" role="button">
+                        <i class="bi bi-bug-fill"></i> View Bugs
+                    </a>
+                    <a class="btn btn-success btn-lg ms-2" th:href="@{/bugs/new}" role="button">
+                        <i class="bi bi-plus-circle-fill"></i> Report a New Bug
+                    </a> 
+                </div>
+                <div sec:authorize="isAnonymous()" class="mt-4">
+                    <a class="btn btn-primary btn-lg" th:href="@{/auth}" role="button">Login to Get Started</a>
+                    <a class="btn btn-outline-secondary btn-lg ms-2" th:href="@{/register}" role="button">Register</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="row align-items-md-stretch gy-4">
+            <div class="col-md-6">
+                <div class="h-100 p-5 text-bg-dark rounded-3 shadow">
+                    <h2><i class="bi bi-card-list"></i> View All Bugs</h2>
+                    <p>Browse through all reported bugs, check their status, and see details. Stay updated on ongoing issues.</p>
+                    <a class="btn btn-outline-light" th:href="@{/bugs}" type="button">
+                        Go to Bug List <i class="bi bi-arrow-right-circle"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="h-100 p-5 bg-light border rounded-3 shadow">
+                    <h2><i class="bi bi-pencil-square"></i> Report a New Bug</h2>
+                    <p>Found an issue? Help us improve by submitting a detailed bug report. Every report counts!</p>
+                    <a class="btn btn-outline-secondary" th:href="@{/bugs/new}" type="button">
+                        Submit a Bug <i class="bi bi-arrow-right-circle"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+</body>
+</html>

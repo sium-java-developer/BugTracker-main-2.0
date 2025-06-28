@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<!--
+  This file now acts as a content provider for the main layout.
+  The th:replace attribute on the <html> tag is the key change,
+  passing 'error' as the currentPage parameter.
+-->
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layouts/main-layout :: main-layout(~{::title}, ~{::.content}, 'error')}">
+
+<head>
+    <!-- This title will be passed to the main-layout's <title> tag -->
+    <title>Error - Bug Tracker</title>
+</head>
+
+<body>
+
+<!-- This entire div will replace the content placeholder in the main-layout -->
+<div class="content">
+    <div class="container mt-5 mb-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8 text-center">
+                <div class="card shadow-sm p-4">
+                    <h1 class="display-4 text-danger">Oops! Something went wrong.</h1>
+                    <p class="lead">We apologize for the inconvenience.</p>
+
+                    <!-- Display specific error details if available -->
+                    <!-- Note: Spring Boot's BasicErrorController typically exposes 'status', 'error', 'message', 'trace' -->
+                    <div th:if="${status != null}" class="alert alert-danger mt-4">
+                        <p><strong>Error Code:</strong> <span th:text="${status}"></span></p>
+                    </div>
+                    <div th:if="${error != null}" class="alert alert-danger mt-2">
+                        <p><strong>Error:</strong> <span th:text="${error}"></span></p>
+                    </div>
+                    <div th:if="${message != null}" class="alert alert-danger mt-2">
+                        <p><strong>Details:</strong> <span th:text="${message}"></span></p>
+                    </div>
+                    <!-- Stack trace is usually only shown in dev/test environments.
+                         Consider controlling its visibility via application.properties (server.error.include-stacktrace=never/always/on_param) -->
+                    <div th:if="${trace != null}" class="alert alert-secondary mt-2 text-start">
+                        <p><strong>Stack Trace:</strong></p>
+                        <pre th:text="${trace}"></pre>
+                    </div>
+
+                    <!-- Fallback generic message if no specific details are available -->
+                    <div th:unless="${status != null or error != null or message != null or trace != null}" class="alert alert-info mt-4">
+                        <p>An unexpected error occurred. Please try again later.</p>
+                    </div>
+
+                    <hr class="my-4">
+                    <a th:href="@{/}" class="btn btn-primary">Go to Home Page</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layouts/main-layout :: main-layout(~{::title}, ~{::.content}, 'bugs')}">
+<head>
+    <title>Bug Tracker - Bug List</title>
+</head>
+<body>
+<div class="content">
+    <div class="container mt-4 mb-4">
+
+        <h1 class="mb-3">Bug Tracker - Bug List</h1>
+        <hr>
+
+        <!-- Display Flash Messages -->
+        <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+            <span th:text="${successMessage}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <span th:text="${errorMessage}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+        <table class="table table-striped table-hover">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Priority</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- Note: The model attribute should be 'bugsPage.content', not just 'bugs' -->
+            <tr th:each="bug : ${bugsPage.content}">
+                <td th:text="${bug.id}">1</td>
+                <td><a th:href="@{/bugs/{id}(id=${bug.id})}" th:text="${bug.title}">Sample Bug Title</a></td>
+                <td th:text="${bug.priority}">MEDIUM</td>
+                <td th:text="${bug.status}">OPEN</td>
+                <td>
+                    <a class="btn btn-sm btn-primary me-1" th:href="@{/bugs/{id}/edit(id=${bug.id})}">Edit</a>
+                    <form th:action="@{/bugs/{id}/delete(id=${bug.id})}" method="post" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this bug?');">
+                        <button class="btn btn-sm btn-danger" type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            <tr th:if="${bugsPage.empty}">
+                <td colspan="5" class="text-center text-muted">No bugs found.</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <a class="btn btn-success mt-3" th:href="@{/bugs/new}">Create New Bug</a>
+
+    </div>
+</div>
+</body>
+</html>

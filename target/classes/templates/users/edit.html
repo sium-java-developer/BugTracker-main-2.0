@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layouts/main-layout :: main-layout(~{::title}, ~{::.content}, 'editUser')}">
+<head>
+    <!-- The title now dynamically includes the username for better context -->
+    <title>Bug Tracker - Edit User: [[${user.username}]]</title>
+</head>
+<body>
+
+<!-- This entire div will replace the 'content' placeholder in the main-layout -->
+<div class="content">
+    <div class="container mt-4 mb-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-7">
+                <div class="card shadow-sm">
+                    <div class="card-header d-flex justify-content-between align-items-center bg-warning text-dark">
+                        <h2 class="card-title mb-0 h5">
+                            <i class="bi bi-pencil-square me-2"></i>Edit User: <span th:text="${user.username}"></span>
+                        </h2>
+                        <a th:href="@{/users}" class="btn btn-sm btn-outline-dark">
+                            <i class="bi bi-arrow-left me-1"></i> Back to Users
+                        </a>
+                    </div>
+
+                    <div class="card-body p-4">
+                        <!-- The form is bound to the 'user' object in the model -->
+                        <form th:action="@{/users/{id}/edit(id=${user.id})}" th:object="${user}" method="post" novalidate>
+                            <!-- Hidden field for ID, essential for updates -->
+                            <input type="hidden" th:field="*{id}">
+
+                            <!-- Error messages for global errors or specific fields -->
+                            <div th:if="${#fields.hasGlobalErrors()}" class="alert alert-danger" role="alert">
+                                <p th:each="err : ${#fields.globalErrors()}" th:text="${err}"></p>
+                            </div>
+                            <div th:if="${updateError}" class="alert alert-danger" role="alert" th:text="${updateError}"></div>
+
+                            <!-- Username (Read-only) -->
+                            <div class="mb-3">
+                                <label for="username" class="form-label">Username</label>
+                                <input type="text" class="form-control" id="username" th:field="*{username}" readonly>
+                                <div class="form-text text-muted">Username cannot be changed.</div>
+                            </div>
+
+                            <!-- Password (Optional) -->
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Password (leave blank to keep current)</label>
+                                <input type="password" class="form-control" id="password" th:field="*{password}"
+                                       th:classappend="${#fields.hasErrors('password')} ? 'is-invalid' : ''">
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+                            </div>
+
+                            <!-- First Name -->
+                            <div class="mb-3">
+                                <label for="firstName" class="form-label">First Name</label>
+                                <input type="text" class="form-control" id="firstName" th:field="*{firstName}"
+                                       th:classappend="${#fields.hasErrors('firstName')} ? 'is-invalid' : ''">
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></div>
+                            </div>
+
+                            <!-- Last Name -->
+                            <div class="mb-3">
+                                <label for="lastName" class="form-label">Last Name</label>
+                                <input type="text" class="form-control" id="lastName" th:field="*{lastName}"
+                                       th:classappend="${#fields.hasErrors('lastName')} ? 'is-invalid' : ''">
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></div>
+                            </div>
+
+                            <!-- Email -->
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="email" th:field="*{email}"
+                                       th:classappend="${#fields.hasErrors('email')} ? 'is-invalid' : ''">
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+                            </div>
+
+                            <!-- Is Admin Checkbox -->
+                            <div class="mb-4 form-check">
+                                <input type="checkbox" class="form-check-input" id="admin" th:field="*{admin}">
+                                <label class="form-check-label" for="admin">Assign Administrator Role</label>
+                                <!-- Use d-block for invalid-feedback on checkboxes to ensure visibility -->
+                                <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('admin')}" th:errors="*{admin}"></div>
+                            </div>
+
+                            <hr class="my-4">
+
+                            <!-- Action Buttons -->
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <a class="btn btn-outline-secondary me-md-2" th:href="@{/users}">Cancel</a>
+                                <button type="submit" class="btn btn-warning text-dark">
+                                    <i class="bi bi-save me-1"></i> Update User
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

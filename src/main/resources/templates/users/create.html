@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layouts/main-layout :: main-layout(~{::title}, ~{::.content}, 'createUser')}">
+<head>
+    <title>Bug Tracker - Create New User</title>
+</head>
+<body>
+
+<!-- This entire div will replace the 'content' placeholder in the main-layout -->
+<div class="content">
+    <div class="container mt-4 mb-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-7">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-info text-white">
+                        <h2 class="card-title mb-0"><i class="bi bi-person-plus-fill me-2"></i>Create New User</h2>
+                    </div>
+                    <div class="card-body p-4">
+
+                        <!-- Display a general error message if one is passed from the controller -->
+                        <div th:if="${creationError}" class="alert alert-danger" role="alert" th:text="${creationError}">
+                            A general creation error occurred.
+                        </div>
+
+                        <!-- The form action now points to POST /users, which is more RESTful -->
+                        <form th:action="@{/users}" th:object="${user}" method="post" novalidate>
+
+                            <!-- Username -->
+                            <div class="mb-3">
+                                <label for="username" class="form-label">Username</label>
+                                <input type="text" id="username" th:field="*{username}" class="form-control"
+                                       th:classappend="${#fields.hasErrors('username')} ? 'is-invalid' : ''"
+                                       required autofocus/>
+                                <div th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="invalid-feedback"></div>
+                            </div>
+
+                            <!-- Password -->
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Password</label>
+                                <input type="password" id="password" th:field="*{password}" class="form-control"
+                                       th:classappend="${#fields.hasErrors('password')} ? 'is-invalid' : ''"
+                                       required/>
+                                <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="invalid-feedback"></div>
+                            </div>
+
+                            <!-- First Name -->
+                            <div class="mb-3">
+                                <label for="firstName" class="form-label">First Name</label>
+                                <input type="text" id="firstName" th:field="*{firstName}" class="form-control"
+                                       th:classappend="${#fields.hasErrors('firstName')} ? 'is-invalid' : ''"/>
+                                <div th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" class="invalid-feedback"></div>
+                            </div>
+
+                            <!-- Last Name -->
+                            <div class="mb-3">
+                                <label for="lastName" class="form-label">Last Name</label>
+                                <input type="text" id="lastName" th:field="*{lastName}" class="form-control"
+                                       th:classappend="${#fields.hasErrors('lastName')} ? 'is-invalid' : ''"/>
+                                <div th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" class="invalid-feedback"></div>
+                            </div>
+
+                            <!-- Email -->
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" id="email" th:field="*{email}" class="form-control"
+                                       th:classappend="${#fields.hasErrors('email')} ? 'is-invalid' : ''"
+                                       required/>
+                                <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="invalid-feedback"></div>
+                            </div>
+
+                            <!-- Is Admin Checkbox -->
+                            <div class="mb-4 form-check">
+                                <!-- Note: The field name *{admin} must match the boolean field in your User DTO/Entity -->
+                                <input type="checkbox" class="form-check-input" id="admin" th:field="*{admin}">
+                                <label class="form-check-label" for="admin">Assign Administrator Role</label>
+                                <div th:if="${#fields.hasErrors('admin')}" th:errors="*{admin}" class="invalid-feedback d-block"></div>
+                            </div>
+
+                            <hr class="my-4">
+
+                            <!-- Action Buttons -->
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <a class="btn btn-outline-secondary me-md-2" th:href="@{/users}">Cancel</a>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bi bi-check-circle me-1"></i> Create User
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

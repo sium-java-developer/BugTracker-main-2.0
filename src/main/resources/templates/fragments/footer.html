@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<!--
+  This file is a Thymeleaf fragment representing the application footer.
+  It should NOT contain <html>, <head>, or <body> tags as those will be
+  provided by the main HTML page that includes this fragment.
+-->
+<!-- Removed the <html> tag from here -->
+
+<!-- The th:fragment attribute defines this <footer> block as a reusable fragment named "footer" -->
+<footer class="container-fluid bg-light text-center p-3 mt-auto" th:fragment="footer"
+        xmlns:th="http://www.w3.org/1999/xhtml">
+    <!--
+        - container-fluid: Makes the footer span the full width.
+        - bg-light: Gives a light background.
+        - text-center: Centers the text.
+        - p-3: Adds padding.
+        - mt-auto: This Bootstrap 5 utility class is useful if your main content
+                   area might not always fill the viewport height. It pushes the
+                   footer to the bottom when used in a flex container (like <body>
+                   with d-flex flex-column).
+    -->
+    <div class="container"> <!-- Optional inner container for content alignment -->
+        <p class="mb-0">&copy; <span th:text="${#dates.year(#dates.createNow())}">2025</span>
+            Bug Tracker. All Rights Reserved.</p>
+        <!-- You could add more links or information here if needed -->
+        <!-- <p class="mb-0"><a th:href="@{/privacy-policy}">Privacy Policy</a> | <a th:href="@{/terms-of-service}">Terms of Service</a></p> -->
+    </div>
+</footer>
+
+<!-- Removed the </html> tag from here -->

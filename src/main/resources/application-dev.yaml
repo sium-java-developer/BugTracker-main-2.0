@@ -1,0 +1,77 @@
+# ===================================================================
+# Development Profile Configuration (application-dev.yaml)
+# ===================================================================
+# These settings are active only when the 'dev' profile is enabled.
+
+server:
+  port: 8081
+  servlet:
+    context-path: /
+  compression:
+    enabled: true
+
+spring:
+  # --- Database & JPA Configuration ---
+  datasource:
+    # H2 In-Memory Database for easy development and testing.
+    driverClassName: org.h2.Driver
+    url: jdbc:h2:mem:bugtrackerdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    username: sa
+    password: "" # Password is empty for the default 'sa' user.
+
+  jpa:
+    # This is the crucial fix. We disable Hibernate's automatic DDL (Data Definition Language)
+    # generation. This gives full control to our custom SQL scripts.
+    hibernate:
+      ddl-auto: 'create-drop'
+    # These properties make the generated SQL readable in the console for debugging.
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+        use_sql_comments: true
+    defer-datasource-initialization: true
+
+  # --- H2 Web Console ---
+  # Provides a web interface to view the in-memory database content.
+  h2:
+    console:
+      enabled: true
+      path: /h2-console # Access at http://localhost:8081/h2-console
+
+  # --- Thymeleaf Template Engine ---
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML
+    encoding: UTF-8
+
+  # --- Internationalization (i18n) ---
+  messages:
+    basename: i18n/messages,i18n/global
+    encoding: UTF-8
+    always-use-message-format: true
+
+  # --- Web & MVC Settings ---
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10MB
+      max-request-size: 12MB
+
+# --- Logging Configuration ---
+logging:
+  level:
+    # Set default logging level for the entire application.
+    root: INFO
+    # Set more detailed logging for our application's packages.
+    org.bugtracker: DEBUG
+    # Set detailed logging for key Spring Framework components to aid in debugging.
+    org.springframework.web: INFO
+    org.springframework.security: DEBUG # Crucial for debugging login/authorization issues.
+    org.hibernate.SQL: DEBUG # To see the SQL queries executed by Hibernate.
+    org.hibernate.type.descriptor.sql: TRACE # To see the parameter values bound to SQL queries.

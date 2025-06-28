@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layouts/main-layout :: main-layout(~{::title}, ~{::.content}, 'about')}">
+<head>
+    <title>About Bug Tracker</title>
+</head>
+<body>
+<div class="content">
+    <div class="container mt-4 mb-5">
+        <div class="row justify-content-center">
+            <div class="col-md-10 col-lg-8">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-light">
+                        <h1 class="card-title mb-0 h3"><i class="bi bi-info-circle-fill me-2"></i>About Bug Tracker</h1>
+                    </div>
+                    <div class="card-body p-4">
+                        <p class="lead">
+                            Welcome to Bug Tracker, a simple yet effective application designed to help you manage and track software bugs efficiently.
+                        </p>
+                        <p>
+                            This project is built using Spring Boot for the backend and Thymeleaf for the frontend, providing a robust and user-friendly experience.
+                        </p>
+
+                        <hr class="my-4">
+
+                        <h2 class="h4"><i class="bi bi-bullseye me-2"></i>Our Mission</h2>
+                        <p>
+                            Our mission is to provide a straightforward and intuitive platform for developers and testers to report, categorize, and resolve bugs, ensuring higher quality software releases.
+                        </p>
+
+                        <h2 class="mt-4 h4"><i class="bi bi-star-fill me-2"></i>Key Features</h2>
+                        <ul>
+                            <li>Easy bug reporting with detailed descriptions.</li>
+                            <li>Categorization of bugs by priority and status.</li>
+                            <li>User management to assign and track bugs.</li>
+                            <li>Clean and responsive user interface.</li>
+                        </ul>
+
+                        <h2 class="mt-4 h4"><i class="bi bi-stack me-2"></i>Technologies Used</h2>
+                        <ul>
+                            <li><strong>Backend:</strong> Spring Boot, Spring Security, Spring Data JPA, Hibernate</li>
+                            <li><strong>Database:</strong> H2 (in-memory for development)</li>
+                            <li><strong>Frontend:</strong> Thymeleaf, Bootstrap 5</li>
+                            <li><strong>Build Tool:</strong> Maven</li>
+                        </ul>
+
+                        <hr class="my-4">
+
+                        <p class="text-center text-muted">Thank you for using Bug Tracker!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

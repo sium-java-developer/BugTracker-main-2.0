@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layouts/main-layout :: main-layout(~{::title}, ~{::.content}, 'editBug')}">
+
+<head>
+    <title>Edit Bug: [[${bug.title}]]</title>
+</head>
+<body>
+<div class="content">
+    <div class="container mt-4 mb-5">
+        <div class="row justify-content-center">
+            <div class="col-md-9 col-lg-8">
+                <div class="card shadow-sm">
+                    <div class="card-header d-flex justify-content-between align-items-center bg-warning text-dark">
+                        <h2 class="card-title mb-0 h5">
+                            <i class="bi bi-pencil-square me-2"></i>Edit Bug
+                        </h2>
+                        <a th:href="@{/bugs}" class="btn btn-sm btn-outline-dark">
+                            <i class="bi bi-arrow-left me-1"></i> Back to Bug List
+                        </a>
+                    </div>
+                    <div class="card-body p-4">
+                        <form th:action="@{/bugs/{id}/edit(id=${bug.id})}" th:object="${bug}" method="post" novalidate>
+                            <input type="hidden" th:field="*{id}">
+
+                            <!-- ======================================================== -->
+                            <!-- IMPORTANT FIX: This global error div MUST be INSIDE the <form> -->
+                            <!-- ======================================================== -->
+                            <div th:if="${#fields.hasGlobalErrors()}" class="alert alert-danger" role="alert">
+                                <p th:each="err : ${#fields.globalErrors()}" th:text="${err}"></p>
+                            </div>
+                            <div th:if="${errorMessage}" class="alert alert-danger" role="alert" th:text="${errorMessage}"></div>
+
+                            <!-- Title -->
+                            <div class="mb-3">
+                                <label for="title" class="form-label">Title</label>
+                                <input type="text" class="form-control" id="title" th:field="*{title}"
+                                       th:classappend="${#fields.hasErrors('title')} ? 'is-invalid' : ''" required>
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></div>
+                            </div>
+
+                            <!-- Description -->
+                            <div class="mb-3">
+                                <label for="description" class="form-label">Description</label>
+                                <textarea class="form-control" id="description" rows="4" th:field="*{description}"
+                                          th:classappend="${#fields.hasErrors('description')} ? 'is-invalid' : ''" required></textarea>
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></div>
+                            </div>
+
+                            <!-- Priority and Status in a row -->
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="priority" class="form-label">Priority</label>
+                                    <select class="form-select" id="priority" th:field="*{priority}"
+                                            th:classappend="${#fields.hasErrors('priority')} ? 'is-invalid' : ''">
+                                        <option th:each="p : ${T(org.bugtracker.entities.Priority).values()}"
+                                                th:value="${p}" th:text="${p.displayName}"></option>
+                                    </select>
+                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('priority')}" th:errors="*{priority}"></div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="status" class="form-label">Status</label>
+                                    <select class="form-select" id="status" th:field="*{status}"
+                                            th:classappend="${#fields.hasErrors('status')} ? 'is-invalid' : ''">
+                                        <option th:each="s : ${T(org.bugtracker.entities.Status).values()}"
+                                                th:value="${s}" th:text="${s.displayName}"></option>
+                                    </select>
+                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('status')}" th:errors="*{status}"></div>
+                                </div>
+                            </div>
+
+                            <!-- Assigned Users -->
+                            <div class="mb-4">
+                                <label for="assignedUsers" class="form-label">Assign Users</label>
+                                <select class="form-select" id="assignedUsers" th:field="*{assignedUsers}" multiple="multiple" size="5">
+                                    <option th:each="user : ${allUsers}"
+                                            th:value="${user.id}"
+                                            th:text="${user.firstName + ' ' + user.lastName + ' (' + user.username + ')'}"></option>
+                                </select>
+                                <div class="form-text">Hold Ctrl (or Cmd on Mac) to select multiple users.</div>
+                                <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('assignedUsers')}" th:errors="*{assignedUsers}"></div>
+                            </div>
+
+                            <hr class="my-4">
+
+                            <!-- Action Buttons -->
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <a class="btn btn-outline-secondary me-md-2" th:href="@{/bugs}">Cancel</a>
+                                <button type="submit" class="btn btn-warning text-dark">
+                                    <i class="bi bi-save me-1"></i> Update Bug
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

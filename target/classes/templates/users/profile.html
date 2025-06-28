@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layouts/main-layout :: main-layout(~{::title}, ~{::.content}, 'profile')}">
+<head>
+    <title>Your Profile</title>
+</head>
+<body>
+
+<!-- This entire div will replace the 'content' placeholder in the main-layout -->
+<div class="content">
+    <div class="container mt-4 mb-5">
+        <div class="row justify-content-center">
+            <div class="col-md-9 col-lg-8">
+
+                <!-- Success/Error Messages -->
+                <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+                    <span th:text="${successMessage}"></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <span th:text="${errorMessage}"></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+
+                <div class="card shadow-sm">
+                    <div class="card-header d-flex justify-content-between align-items-center bg-light">
+                        <h2 class="card-title mb-0 h5">
+                            <i class="bi bi-person-circle me-2"></i>Your Profile
+                        </h2>
+                    </div>
+                    <div class="card-body p-4">
+                        <!-- Using a two-column layout for better organization -->
+                        <div class="row">
+                            <div class="col-md-6">
+                                <!-- Using a Definition List for more semantic markup -->
+                                <dl class="row">
+                                    <dt class="col-sm-4">Username</dt>
+                                    <dd class="col-sm-8" th:text="${user.username}"></dd>
+
+                                    <dt class="col-sm-4">Full Name</dt>
+                                    <dd class="col-sm-8" th:text="${user.firstName + ' ' + user.lastName}"></dd>
+
+                                    <dt class="col-sm-4">Email</dt>
+                                    <dd class="col-sm-8"><a th:href="'mailto:' + ${user.email}" th:text="${user.email}"></a></dd>
+                                </dl>
+                            </div>
+                            <div class="col-md-6">
+                                <dl class="row">
+                                    <dt class="col-sm-4">Role</dt>
+                                    <dd class="col-sm-8">
+                                        <!-- Using badges for a better visual representation of the role -->
+                                        <span th:if="${user.admin}" class="badge bg-danger">Admin</span>
+                                        <span th:unless="${user.admin}" class="badge bg-secondary">User</span>
+                                    </dd>
+
+                                    <dt class="col-sm-4">Member Since</dt>
+                                    <dd class="col-sm-8" th:text="${#temporals.format(user.createdAt, 'dd MMM yyyy, HH:mm')}"></dd>
+
+                                    <dt class="col-sm-4">Last Updated</dt>
+                                    <dd class="col-sm-8" th:text="${#temporals.format(user.updatedAt, 'dd MMM yyyy, HH:mm')}"></dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
