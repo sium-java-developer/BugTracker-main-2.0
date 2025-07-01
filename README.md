@@ -83,12 +83,3 @@ The project includes a multi-stage `Dockerfile` to create an optimized and light
     docker run -p 8081:8081 bug-tracker-app
     ```
     The application will be accessible at `http://localhost:8081`.
-
-### Deploying to Render.com
-
-This application is configured to be deployed on Render's free tier using its in-memory database.
-
-1.  Create a new **Web Service** on Render and connect your GitHub repository.
-2.  Select **Docker** as the environment.
-3.  Set the **Dockerfile Path** to `./docker-build/Dockerfile`.
-4.  Deploy! No environment variables or persistent disks are needed. The application will start, and the `CommandLineRunner` will seed the in-memory database with sample data.
